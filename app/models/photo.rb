@@ -24,6 +24,7 @@ class Photo < ApplicationRecord
 
   #   return the_user
   # end
+  belongs_to(:poster, { :class_name => "User", :foreign_key => "owner_id"})
 
   # def comments
   #   my_id = self.id
@@ -32,6 +33,7 @@ class Photo < ApplicationRecord
 
   #   return matching_comments
   # end
+  has_many(:comments, { :class_name => "Comment", :foreign_key => "photo_id"})
 
   # def likes
   #   my_id = self.id
@@ -40,6 +42,7 @@ class Photo < ApplicationRecord
 
   #   return matching_likes
   # end
+  has_many(:likes, { :class_name => "Like", :foreign_key => "photo_id"})
 
   # def fans
   #   my_likes = self.likes
@@ -54,6 +57,7 @@ class Photo < ApplicationRecord
 
   #   return matching_users
   # end
+  has_many(:fans, { :through => :likes, :source => :fan})
 
   # def fan_list
   #   my_fans = self.fans

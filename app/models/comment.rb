@@ -22,6 +22,8 @@ class Comment < ApplicationRecord
 
   #   return the_user
   # end
+  belongs_to(:commenter, { :class_name => "User", :foreign_key => "author_id", :required => false })
+
 
   # def photo
   #   my_photo_id = self.photo_id
@@ -32,4 +34,5 @@ class Comment < ApplicationRecord
 
   #   return the_photo
   # end
+  belongs_to(:photo, { :class_name => "Photo", :foreign_key => "photo_id"})
 end
