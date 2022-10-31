@@ -108,8 +108,11 @@ has_many(:liked_photos, { :through => :likes, :source => :photo})
   #   return matching_follow_requests
   # end
  
-  has_many(:accepted_sent_follow_requests, { :class_name => "FollowRequest", :foreign_key => "sender_id", :status => "accepted"})
-
+  # has_many(:accepted_sent_follow_requests, { :class_name => "FollowRequest", :foreign_key => "sender_id" })
+  has_many(:accepted_sent_follow_requests, -> {where status: "accepted"}, {
+    :class_name => "FollowRequest",
+    :foreign_key => "sender_id"
+  })
   # def accepted_received_follow_requests
   #   my_received_follow_requests = self.received_follow_requests
 
@@ -117,6 +120,7 @@ has_many(:liked_photos, { :through => :likes, :source => :photo})
 
   #   return matching_follow_requests
   # end
+  has_many(:accepted_received_follow_requests, -> {where status: "accepted"}, { :class_name => "FollowRequest", :foreign_key => "recipient_id"})
 
   # def followers
   #   my_accepted_received_follow_requests = self.accepted_received_follow_requests
@@ -131,6 +135,7 @@ has_many(:liked_photos, { :through => :likes, :source => :photo})
 
   #   return matching_users
   # end
+  has_many(:followers, { :through => :accepted_received_follow_requests, :source => :sender} )
 
   # def leaders
   #   my_accepted_sent_follow_requests = self.accepted_sent_follow_requests
@@ -146,6 +151,7 @@ has_many(:liked_photos, { :through => :likes, :source => :photo})
   #   return matching_users
   # end
 
+  has_many(:leaders, { :through => :accepted_sent_follow_requests, :source => :recipient})
   # def feed
   #   array_of_photo_ids = Array.new
 
@@ -163,7 +169,7 @@ has_many(:liked_photos, { :through => :likes, :source => :photo})
 
   #   return matching_photos
   # end
-
+  has_many(:feed, { :through => :leaders, :source => :own_photos})
   # def discover
   #   array_of_photo_ids = Array.new
 
@@ -181,4 +187,5 @@ has_many(:liked_photos, { :through => :likes, :source => :photo})
 
   #   return matching_photos
   # end
+  has_many(:discover, { :through => :leaders, :source => :liked_photos})
 end
