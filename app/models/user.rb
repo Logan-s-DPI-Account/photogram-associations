@@ -78,6 +78,7 @@ has_many(:liked_photos, { :through => :likes, :source => :photo})
 
   #   return unique_matching_photos
   # end
+  has_many(:commented_photos, { :through => :comments, :source => :photo})
 
   # def sent_follow_requests
   #   my_id = self.id
@@ -86,6 +87,7 @@ has_many(:liked_photos, { :through => :likes, :source => :photo})
 
   #   return matching_follow_requests
   # end
+  has_many(:sent_follow_requests, { :class_name => "FollowRequest", :foreign_key => "sender_id"})
 
   # def received_follow_requests
   #   my_id = self.id
@@ -95,6 +97,9 @@ has_many(:liked_photos, { :through => :likes, :source => :photo})
   #   return matching_follow_requests
   # end
 
+  has_many(:received_follow_requests, { :class_name => "FollowRequest", :foreign_key => "recipient_id"})
+
+ 
   # def accepted_sent_follow_requests
   #   my_sent_follow_requests = self.sent_follow_requests
 
@@ -102,6 +107,8 @@ has_many(:liked_photos, { :through => :likes, :source => :photo})
 
   #   return matching_follow_requests
   # end
+ 
+  has_many(:accepted_sent_follow_requests, { :class_name => "FollowRequest", :foreign_key => "sender_id", :status => "accepted"})
 
   # def accepted_received_follow_requests
   #   my_received_follow_requests = self.received_follow_requests
